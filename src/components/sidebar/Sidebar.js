@@ -5,9 +5,8 @@ import Photo from './user2-160x160.jpg';
 export default function Sidebar(){
 
     return(
-        /* <!-- Main Sidebar Container --> */
+        
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
-          {/* <!-- Brand Logo --> */}
           <a href="index3.html" className="brand-link">
             <img 
                 src={Logo} 
@@ -18,9 +17,7 @@ export default function Sidebar(){
             <span className="brand-text font-weight-light">CMS</span>
           </a>
       
-         {/*  <!-- Sidebar --> */}
           <div className="sidebar">
-            {/* <!-- Sidebar user panel (optional) --> */}
             <div className="user-panel mt-3 pb-3 mb-3 d-flex">
               <div className="image">
                 <img
@@ -34,7 +31,6 @@ export default function Sidebar(){
               </div>
             </div>
       
-            {/* <!-- Sidebar Menu --> */}
             <nav className="mt-2">
 
                 <ul 
@@ -45,7 +41,7 @@ export default function Sidebar(){
                 >
 
                     <li className="nav-item">
-                        <a href="#/" className="nav-link">
+                        <a href="/" className="nav-link">
                             <i className="nav-icon fas fa-user-lock"></i>
                             <p>
                             Administradores
@@ -55,7 +51,7 @@ export default function Sidebar(){
                     </li>
 
                     <li className="nav-item">
-                        <a href="#/" className="nav-link">
+                        <a href="/slide" className="nav-link">
                             <i className="nav-icon fas fa-sliders-h"></i>
                             <p>
                                 Slide
@@ -65,7 +61,7 @@ export default function Sidebar(){
                     </li>
 
                     <li className="nav-item">
-                        <a href="#/" className="nav-link">
+                        <a href="/galeria" className="nav-link">
                             <i className="nav-icon fas fa-images"></i>
                             <p>
                                 Galeria
@@ -75,7 +71,7 @@ export default function Sidebar(){
                     </li>
 
                     <li className="nav-item">
-                        <a href="#/" className="nav-link">
+                        <a href="/articulos" className="nav-link">
                             <i className="nav-icon fas fa-file"></i>
                             <p>
                                 Articulos
@@ -85,7 +81,7 @@ export default function Sidebar(){
                     </li>
 
                     <li className="nav-item">
-                        <a href="#/" className="nav-link">
+                        <a href="/usuarios" className="nav-link">
                             <i className="nav-icon fas fa-users"></i>
                             <p>
                                 Usuarios
@@ -95,9 +91,7 @@ export default function Sidebar(){
                     </li>
                 </ul>
             </nav>
-            {/* <!-- /.sidebar-menu --> */}
           </div>
-          {/* <!-- /.sidebar --> */}
         </aside>
     )
 
