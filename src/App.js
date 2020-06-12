@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
-function App() {
+import Header from './components/header/Header';
+import Sidebar from './components/sidebar/Sidebar';
+import Footer from './components/footer/Footer';
+
+import Administradores from './components/content/administradores/Administradores';
+import Articulos from './components/content/articulos/Articulos';
+import Galeria from './components/content/galeria/Galeria';
+import Slide from './components/content/slide/Slide';
+import Usuarios from './components/content/usuarios/Usuarios';
+
+import Error404 from './components/content/error404/Error404';
+
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="sidebar-mini">
+      <div className="wrapper">
+
+        <Header/>
+        <Sidebar/>
+
+        <BrowserRouter>
+          <Switch>
+
+            <Route exact path="/" component={Administradores}/>
+            <Route exact path="/articulos" component={Articulos}/>
+            <Route exact path="/galeria" component={Galeria}/>
+            <Route exact path="/slide" component={Slide}/>
+            <Route exact path="/usuarios" component={Usuarios}/>
+            <Route component={Error404}/>
+
+          </Switch>
+        </BrowserRouter>
+
+        <Footer/>
+
+      </div>
     </div>
   );
 }
-
-export default App;
