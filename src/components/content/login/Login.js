@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {rutaAPI} from '../../../config/Config';
+import $ from 'jquery';
 
 export default function Login(){
 
@@ -19,8 +21,21 @@ export default function Login(){
     }
 
     /* Ejecutamos el submit */
-    const login = e => {
+    const login = async e => {
+
+        /* Removemos la clase alert cada que se da click en el submit */
+        $(".alert").remove();
+
+        /* Se evita el evento por default al dar click en submit */
         e.preventDefault();
+        
+        const result = await loginAPI(administradores);
+
+        if(result.status !== 200){
+            $("button[type='submit']").before(`<div class='alert alert-danger'>${result.mensaje}</div>`)
+        } else{
+            $("button[type='submit']").before(`<div class='alert alert-success'>${result.token}</div>`)
+        }
     }
 
     /* Retornamos la vista */
@@ -94,4 +109,32 @@ export default function Login(){
 
     )
 
+}
+
+/* Peticion POST para login */
+const loginAPI = data => {
+    const url = `${rutaAPI}/login`;
+    
+    const params = {
+        method:'POST',
+        body: JSON.stringify(data),
+        headers:{
+            'Content-Type':'application/json'
+        }
+    }
+
+    return fetch(url, params).then(response => {
+
+        return response.json();
+
+    }).then(result => {
+
+        return result;
+
+    }).catch(err => {
+
+          return err;
+
+    })
+    
 }
