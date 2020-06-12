@@ -11,6 +11,8 @@ import Galeria from './components/content/galeria/Galeria';
 import Slide from './components/content/slide/Slide';
 import Usuarios from './components/content/usuarios/Usuarios';
 
+import Error404 from './components/content/error404/Error404';
+
 
 export default function App() {
   return (
@@ -22,11 +24,14 @@ export default function App() {
 
         <BrowserRouter>
           <Switch>
+
             <Route exact path="/" component={Administradores}/>
             <Route exact path="/articulos" component={Articulos}/>
             <Route exact path="/galeria" component={Galeria}/>
             <Route exact path="/slide" component={Slide}/>
             <Route exact path="/usuarios" component={Usuarios}/>
+            <Route component={Error404}/>
+
           </Switch>
         </BrowserRouter>
 
