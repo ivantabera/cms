@@ -1,5 +1,6 @@
 import React from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 /* Componente login */
 import Login from './components/content/login/Login';
@@ -20,7 +21,7 @@ import Error404 from './components/content/error404/Error404';
 
 export default function App() {
 
-  const auth = false;
+  const auth = getAccessToken();
 
   if(!auth){
     return(
@@ -54,4 +55,25 @@ export default function App() {
       </div>
     </div>
   );
+}
+
+/* Funcion para tener acceso al token */
+const getAccessToken =  () => {
+
+  const accessToken = localStorage.getItem("ACCESS_TOKEN");
+  const id = localStorage.getItem("ID");
+  const usuario = localStorage.getItem("USUARIO");
+
+  if(!accessToken || accessToken === "null"){
+    return false;
+  }
+
+  const metaToken = jwtDecode(accessToken);
+
+  if(metaToken.data._id !== id || metaToken.data.usuario !== usuario){
+    return false;
+  } else {
+    return true;
+  }
+
 }
