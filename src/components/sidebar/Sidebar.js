@@ -4,6 +4,8 @@ import Photo from './user2-160x160.jpg';
 
 export default function Sidebar(){
 
+    const usuario = localStorage.getItem("USUARIO");
+
     return(
         
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -27,7 +29,7 @@ export default function Sidebar(){
                 />
               </div>
               <div className="info">
-                <a href="#/" className="d-block">Administrador</a>
+                <a href="#/" className="d-block">{usuario}</a>
               </div>
             </div>
       
