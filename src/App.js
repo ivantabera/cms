@@ -64,16 +64,33 @@ const getAccessToken =  () => {
   const id = localStorage.getItem("ID");
   const usuario = localStorage.getItem("USUARIO");
 
-  if(!accessToken || accessToken === "null"){
+  if(!accessToken || accessToken === null ||
+    !id || id === null ||
+    !usuario || usuario === null  ){
     return false;
   }
 
   const metaToken = jwtDecode(accessToken);
 
-  if(metaToken.data._id !== id || metaToken.data.usuario !== usuario){
+  if(!metaToken.data){
+    return false;
+  }
+
+  if(tokenExpira(accessToken, metaToken) || metaToken.data._id !== id || metaToken.data.usuario !== usuario){
     return false;
   } else {
     return true;
   }
+
+}
+
+/* Funcion para verificar fecha de expiracion del token */
+const tokenExpira = (accessToken, metaToken) => {
+
+  const seconds = 60;
+  const { exp } = metaToken;
+  const now = (Date.now()+seconds)/1000;
+
+  return exp < now;
 
 }
