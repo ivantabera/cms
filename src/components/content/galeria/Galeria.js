@@ -1,6 +1,9 @@
 import React from 'react';
+import {rutaAPI} from '../../../config/Config';
 
 export default function Galeria(){
+
+    const Galeria01 = `${rutaAPI}/mostrar-img-galeria/4948.jpg`;
 
     return(
 
@@ -25,14 +28,42 @@ export default function Galeria(){
 
                     <div className="card card-primary card-outline">
 
-                        <div className="card-header">
-                            <h5 className="m-0">Featured</h5>
+                    <div className="card-header">
+                            <h5 className="m-0">
+                                <button className="btn btn-primary">
+                                    Crear nueva Galeria
+                                </button>
+                            </h5>
                         </div>
 
                         <div className="card-body">
-                            <h6 className="card-title">Special title treatment</h6>
-                            <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#/" className="btn btn-primary">Go somewhere</a>
+
+                            <table className="table table-striped" style={{width:"100%"}}>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th width="320px">Foto</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <td>1</td>
+                                    <td>
+                                        <img src={Galeria01} className="img-fluid" />
+                                    </td>
+                                    <td>
+                                        <div className="btn-group">
+                                            <button type="button" className="btn btn-warning rounded-circle mr-2">
+                                                <i className="nav-icon fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button type="button" className="btn btn-danger rounded-circle">
+                                                <i className="nav-icon fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tbody>
+                            </table>
+
                         </div>
 
                     </div>

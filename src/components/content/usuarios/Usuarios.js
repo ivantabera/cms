@@ -26,13 +26,26 @@ export default function Usuarios(){
                     <div className="card card-primary card-outline">
 
                         <div className="card-header">
-                            <h5 className="m-0">Featured</h5>
+
                         </div>
 
                         <div className="card-body">
-                            <h6 className="card-title">Special title treatment</h6>
-                            <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#/" className="btn btn-primary">Go somewhere</a>
+
+                            <table className="table table-striped" style={{width:"100%"}}>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <td>1</td>
+                                    <td>ivan</td>
+                                    <td>ivan@gmail.com</td>
+                                </tbody>
+                            </table>
+
                         </div>
 
                     </div>
