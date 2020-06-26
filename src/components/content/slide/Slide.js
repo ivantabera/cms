@@ -49,22 +49,24 @@ export default function Slide(){
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <td>1</td>
-                                            <td>
-                                                <img src={Slide01} className="img-fluid" />
-                                            </td>
-                                            <td>Lorem, ipsum</td>
-                                            <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit</td>
-                                            <td>
-                                                <div className="btn-group">
-                                                    <button type="button" className="btn btn-warning rounded-circle mr-2">
-                                                        <i className="nav-icon fas fa-pencil-alt"></i>
-                                                    </button>
-                                                    <button type="button" className="btn btn-danger rounded-circle">
-                                                        <i className="nav-icon fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                    <img src={Slide01} className="img-fluid" alt="slide" />
+                                                </td>
+                                                <td>Lorem, ipsum</td>
+                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit</td>
+                                                <td>
+                                                    <div className="btn-group">
+                                                        <button type="button" className="btn btn-warning rounded-circle mr-2">
+                                                            <i className="nav-icon fas fa-pencil-alt"></i>
+                                                        </button>
+                                                        <button type="button" className="btn btn-danger rounded-circle">
+                                                            <i className="nav-icon fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
 

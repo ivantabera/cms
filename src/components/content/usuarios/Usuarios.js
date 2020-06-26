@@ -40,9 +40,11 @@ export default function Usuarios(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <td>1</td>
-                                    <td>ivan</td>
-                                    <td>ivan@gmail.com</td>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>ivan</td>
+                                        <td>ivan@gmail.com</td>
+                                    </tr>
                                 </tbody>
                             </table>
 

@@ -47,20 +47,22 @@ export default function Galeria(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <td>1</td>
-                                    <td>
-                                        <img src={Galeria01} className="img-fluid" />
-                                    </td>
-                                    <td>
-                                        <div className="btn-group">
-                                            <button type="button" className="btn btn-warning rounded-circle mr-2">
-                                                <i className="nav-icon fas fa-pencil-alt"></i>
-                                            </button>
-                                            <button type="button" className="btn btn-danger rounded-circle">
-                                                <i className="nav-icon fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <img src={Galeria01} className="img-fluid" alt="galeria" />
+                                        </td>
+                                        <td>
+                                            <div className="btn-group">
+                                                <button type="button" className="btn btn-warning rounded-circle mr-2">
+                                                    <i className="nav-icon fas fa-pencil-alt"></i>
+                                                </button>
+                                                <button type="button" className="btn btn-danger rounded-circle">
+                                                    <i className="nav-icon fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
 

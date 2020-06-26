@@ -51,26 +51,28 @@ export default function Articulos(){
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <td>1</td>
-                                            <td>
-                                                <img src={Articulo01} className="img-fluid" />
-                                            </td>
-                                            <td>lorem-ipsum-1</td>
-                                            <td>Lorem, ipsum</td>
-                                            <td>1 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae accusamus voluptatum omnis non facere itaque aliquam temporibus, nisi pariatur facilis similique possimus eaque iure doloribus natus animi eos, suscipit eum!</td>
-                                            <td>
-                                                <h2>lorem ipsum1</h2><img src="http://localhost:4000/mostrar-img-articulo/1431.jpg" className="py-3 img-fluid"/><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div><br/><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div><br/><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div><br/><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div>
-                                            </td>
-                                            <td>
-                                                <div className="btn-group">
-                                                    <button type="button" className="btn btn-warning rounded-circle mr-2">
-                                                        <i className="nav-icon fas fa-pencil-alt"></i>
-                                                    </button>
-                                                    <button type="button" className="btn btn-danger rounded-circle">
-                                                        <i className="nav-icon fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                    <img src={Articulo01} className="img-fluid" alt="galeria"/>
+                                                </td>
+                                                <td>lorem-ipsum-1</td>
+                                                <td>Lorem, ipsum</td>
+                                                <td>1 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae accusamus voluptatum omnis non facere itaque aliquam temporibus, nisi pariatur facilis similique possimus eaque iure doloribus natus animi eos, suscipit eum!</td>
+                                                <td>
+                                                    <h2>lorem ipsum1</h2><img src="http://localhost:4000/mostrar-img-articulo/1431.jpg" className="py-3 img-fluid" alt="galeria" /><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div><br/><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div><br/><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div><br/><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum vero, consectetur mollitia ducimus ea placeat veritatis totam. Voluptatum qui tenetur ut eum, laboriosam quibusdam amet provident possimus eveniet consequatur ea.</div>
+                                                </td>
+                                                <td>
+                                                    <div className="btn-group">
+                                                        <button type="button" className="btn btn-warning rounded-circle mr-2">
+                                                            <i className="nav-icon fas fa-pencil-alt"></i>
+                                                        </button>
+                                                        <button type="button" className="btn btn-danger rounded-circle">
+                                                            <i className="nav-icon fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
 
