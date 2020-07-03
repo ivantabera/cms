@@ -1,6 +1,17 @@
 import React from 'react';
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs4';
+import 'datatables.net-responsive';
 
 export default function Usuarios(){
+
+    /* Ejecutamos datatable */
+    $(document).ready( function () {
+        $('.table').DataTable({
+            responsive: true
+        });
+    } );
 
     return(
 
@@ -31,7 +42,7 @@ export default function Usuarios(){
 
                         <div className="card-body">
 
-                            <table className="table table-striped" style={{width:"100%"}}>
+                            <table className="table table-striped dt-responsive" style={{width:"100%"}}>
                                 <thead>
                                     <tr>
                                         <th>#</th>

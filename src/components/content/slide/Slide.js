@@ -1,7 +1,18 @@
 import React from 'react';
 import {rutaAPI} from '../../../config/Config';
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs4';
+import 'datatables.net-responsive';
 
 export default function Slide(){
+
+    /* Ejecutamos datatable */
+    $(document).ready( function () {
+        $('.table').DataTable({
+            responsive: true
+        });
+    } );
 
     const Slide01 = `${rutaAPI}/mostrar-img-slide/447.jpg`;
 
@@ -38,7 +49,7 @@ export default function Slide(){
 
                                 <div className="card-body">
 
-                                    <table className="table table-striped" style={{width:"100%"}}>
+                                    <table className="table table-striped dt-responsive" style={{width:"100%"}}>
                                         <thead>
                                             <tr>
                                                 <th>#</th>
