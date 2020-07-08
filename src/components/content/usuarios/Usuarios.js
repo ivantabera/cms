@@ -6,9 +6,22 @@ import 'datatables.net-responsive';
 
 export default function Usuarios(){
 
+    const dataSet = [
+        [1, "Ivan", "ivantabera19@gmail.com", "5edfd9fc11bfeeb9dd10bba3"],
+        [2, "Geras", "gerardot@gmail.com", "5edfd9fc11bfeeb9dd10bba1"]
+    ]
+
     /* Ejecutamos datatable */
     $(document).ready( function () {
         $('.table').DataTable({
+
+            data: dataSet,
+            columns: [
+                {title:"#"},
+                {title:"Usuario"},
+                {title:"Email"}
+            ],
+
             "language" : {
                 "sProcessing":     "Procesando...",
                 "sLengthMenu":     "Mostrar _MENU_ registros",
