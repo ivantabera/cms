@@ -19,7 +19,6 @@ export default function Slide(){
 
         /* Recorreomos los datos del dataset creado y lo convertimos en el arreglo que necesitamos */
         getSlides.data.forEach((currentValue, index)=>{
-            console.log('currentValue', currentValue)
             
             dataSet[index] = [(index+1),
                                 currentValue.imagen,

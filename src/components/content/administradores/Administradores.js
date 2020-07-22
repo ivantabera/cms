@@ -4,6 +4,7 @@ import 'datatables.net';
 import 'datatables.net-bs4';
 import 'datatables.net-responsive';
 import {rutaAPI} from '../../../config/Config';
+import CrearAdministradores from './CrearAdministradores';
 
 
 export default function Administradores(){
@@ -114,7 +115,7 @@ export default function Administradores(){
 
                                 <div className="card-header">
                                     <h5 className="m-0">
-                                        <button className="btn btn-primary">
+                                        <button className="btn btn-primary" data-toggle="modal" data-target="#crearAdmin">
                                             Crear nuevo Administrador
                                         </button>
                                     </h5>
@@ -136,6 +137,9 @@ export default function Administradores(){
 
                 </div>
             </div>
+
+            {/* Ventana modal para la creacion de datos */}
+            <CrearAdministradores/>
 
         </div>
 
