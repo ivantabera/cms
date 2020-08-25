@@ -1,34 +1,29 @@
-import React, {useState} from 'react';
+import React, {useState}  from 'react';
+import Swal from 'sweetalert2';
 import $ from 'jquery';
 import {rutaAPI} from '../../../config/Config';
 
-export default function CrearAdministradores(){
+export default function EditarBorrarAdministradores(){
 
     /* Hook para capturar datos */
-    const [administradores, crearAdministrador] = useState({
+    const [administradores, editarAdministrador] = useState({
         usuario:"",
-        password:""
+        password:"",
+        id:""
     })
 
     /* onChange */
-    const cambiaFormPost = e =>{
-
-        crearAdministrador({
+    const cambiaFormPut = e =>{
+        editarAdministrador({
 
             ...administradores, 
             [e.target.name] : e.target.value
+            
         })
-
     }
 
-    /* Limpiar formulario */
-    $(document).on("click", ".limpiarFormulario", function(){
-        $(".modal").find('form')[0].reset();
-        $("previzualisarImg").attr("src","")
-    })
-
     /* onSubmit */
-    const submitPost = async e => {
+    const submitPut = async e => {
 
         $('.alert').remove();
 
@@ -52,24 +47,20 @@ export default function CrearAdministradores(){
             return;
         }
 
-        /* Validamos que el campo de password no venga vacio */
-        if (password === "") {
-            $(".invalid-password").show();
-            $(".invalid-password").html("Completa este campo");
-            return;
-        }
-
         /* Validamos la expresion regular para el password */
-        const expPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
+        if(password !== ""){
+            const expPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
 
-        if (!expPassword.test(password)) {
-            $(".invalid-password").show();
-            $(".invalid-password").html("Utiliza un formato que coincida con lo solicitado");
-            return;
-        }
+            if (!expPassword.test(password)) {
+                $(".invalid-password").show();
+                $(".invalid-password").html("Utiliza un formato que coincida con lo solicitado");
+                return;
+            }
+        } 
+        
 
-        /* Ejecutamos servicio POST */
-        const result = await postData(administradores);
+        /* Ejecutamos servicio PUT */
+        const result = await putData(administradores);
 
         /* Error en la peticion */
         if(result.status === 400){
@@ -86,25 +77,109 @@ export default function CrearAdministradores(){
         }
     }
 
-    /* Retornamos vista del componente */
+    /* Capturar datos para editar */
+    $(document).on("click", ".editarInputs", function(e){
+
+        e.preventDefault();
+
+        let data = $(this).attr("data").split(',');
+        //console.log('data', data);
+        $("#editarUsuario").val(data[1]);
+
+        editarAdministrador({
+
+            'usuario': $('#editarUsuario').val(), 
+            'password' : $('#editarPassword').val(),
+            'id' : data[0]
+        })
+
+    })
+
+    /* Capturar datos para borrar */
+    $(document).on("click", ".borrarInput", function(e){
+
+        e.preventDefault();
+
+        let data = $(this).attr("data").split(',')[0];
+        $("#editarUsuario").val(data[1]);
+
+
+        Swal.fire({
+            title:'¿Estas seguro de querer borrar a este administrador?',
+            text: "Esta accion no puede ser revertida",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, borralo!'
+        }).then((result) => {
+            if(result.value){
+
+                /* Ejecutamos servicio DELETE */
+                const borrarAdministrador = async () => {
+                    const result = await deleteData(data);
+
+                    /* Error en la peticion */
+                    if(result.status === 400){
+                        Swal.fire({
+                            type: "error",
+                            title: result.mensaje,
+                            showConfirmButton: true,
+                            confirmButtonText: "Cerrar"
+                        }).then(function(result){
+                            if(result.value){
+                                window.location.href="/"
+                            }
+                        })
+                    }
+
+                    /* Peticion exitosa */
+                    if(result.status === 200){
+                        Swal.fire({
+                            type: "success",
+                            title: result.mensaje,
+                            showConfirmButton: true,
+                            confirmButtonText: "Cerrar"
+                        }).then(function(result){
+                            if(result.value){
+                                window.location.href="/"
+                            }
+                        })
+                    }
+
+                }
+                borrarAdministrador();
+                if(result){
+                    Swal.fire(
+                        'Borrado!',
+                        'El administrador ha sido borrado',
+                        'success'
+                    )
+                }
+                
+            }
+        });
+
+    })
+
     return(
 
-        <div className="modal" id="crearAdmin">
+        <div className="modal" id="editarAdmin">
             <div className="modal-dialog">
                 <div className="modal-content">
                 
                     <div className="modal-header">
-                        <h4 className="modal-title">Crear Administrador</h4>
+                        <h4 className="modal-title">Editar Administradores</h4>
                         <button type="button" className="close" data-dismiss="modal">&times;</button>
                     </div>
                     
-                    <form onChange={cambiaFormPost} onSubmit={submitPost} >
+                    <form onChange={cambiaFormPut} onSubmit={submitPut} encType="multipart/form-data" >
 
                         <div className="modal-body">
-                            
+
                             {/* Nombre */}
                             <div className="form-group">
-                                <label className="small text-secondary" htmlFor="usuario">
+                                <label className="small text-secondary" htmlFor="editarUsuario">
                                     Minimo 2 caracteres, maximo 10, sin numeros.
                                 </label>
                                 <div className=" input-group mb-3">
@@ -114,7 +189,7 @@ export default function CrearAdministradores(){
                                     </div>
 
                                     <input
-                                        id="usuario"
+                                        id="editarUsuario"
                                         type="text"
                                         className="form-control text-lowercase"
                                         name="usuario"
@@ -131,7 +206,7 @@ export default function CrearAdministradores(){
 
                             {/* Password */}
                             <div className="form-group">
-                                <label className="small text-secondary" htmlFor="password">
+                                <label className="small text-secondary" htmlFor="editarPassword">
                                     Minimo 6 caracteres, letras en mayúscula, minúscula y numeros
                                 </label>
                                 <div className=" input-group mb-3">
@@ -141,20 +216,19 @@ export default function CrearAdministradores(){
                                     </div>
 
                                     <input
-                                        id="password"
+                                        id="editarPassword"
                                         type="password"
                                         className="form-control"
                                         name="password"
                                         placeholder="Ingrese el Password*"
                                         minLength="8"
                                         pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}"
-                                        required
                                     />
                                     <div className="invalid-feedback invalid-password"></div>
 
                                 </div>
                             </div>
-                            
+
                         </div>
                         
                         <div className="modal-footer d-flex justify-content-between">
@@ -162,7 +236,7 @@ export default function CrearAdministradores(){
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Cerrar</button>
                             </div>
                             <div>
-                                <button type="submit" className="btn btn-primary">Enviar</button>
+                                <button type="submit" className="btn btn-primary">Guardar</button>
                             </div>
                         </div>
 
@@ -176,15 +250,38 @@ export default function CrearAdministradores(){
 
 }
 
-/* Peticion post para crear administradores */
-const postData = data => {
+/* Peticion put para ACTUALIZAR administradores */
+const putData = data => {
 
-    const url = `${rutaAPI}/crear-administrador`;
+    const url = `${rutaAPI}/actualizar-administrador/${data.id}`;
     const token = localStorage.getItem("ACCESS_TOKEN");
 
     const params = {
-        method:"POST",
+        method:"PUT",
         body:JSON.stringify(data),
+        headers: {
+            "Authorization" : token,
+            "Content-type" : "application/json"
+        }
+    }
+
+    return fetch(url, params).then(response => {
+        return response.json();
+    }).then(result => {
+        return result;
+    }).catch(err =>{
+        return err;
+    })
+}
+
+/* Peticion delete para BORRAR administradores */
+const deleteData = data => {
+
+    const url = `${rutaAPI}/borrar-administrador/${data}`;
+    const token = localStorage.getItem("ACCESS_TOKEN");
+
+    const params = {
+        method:"DELETE",
         headers: {
             "Authorization" : token,
             "Content-type" : "application/json"
