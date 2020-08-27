@@ -30,12 +30,12 @@ export default function Slide(){
                                     currentValue._id+'_',    
                                     currentValue.imagen+'_',
                                     currentValue.titulo+'_',
-                                    currentValue.descripcionx,
+                                    currentValue.descripcion,
                                 ]];
         })
 
         /* Comprobando que los datos vengan correctos */
-        //console.log('dataSet', dataSet)
+        /* console.log('dataSet', dataSet) */
 
         /* Ejecutamos datatable */
         $(document).ready( function () {
