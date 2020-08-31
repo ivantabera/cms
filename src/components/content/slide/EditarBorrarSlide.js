@@ -93,14 +93,8 @@ export default function EditarBorrarSlide(){
 
         e.preventDefault();
 
-        const { archivo, titulo, descripcion } = slide;
+        const { titulo, descripcion } = slide;
 
-        /* Validamos la imagen del slide no este vacia */
-        if( archivo === null){
-            $(".invalid-imagen").show();
-            $(".invalid-imagen").html("La imagen no puede ir vacia");
-            return;
-        }
 
         /* Validamos el titulo */
         if(titulo !== ""){
@@ -138,7 +132,7 @@ export default function EditarBorrarSlide(){
 
             $('button[type="submit"]').remove();
 
-            //setTimeout(() =>{ window.location.href = "/slide"; }, 3000);
+            setTimeout(() =>{ window.location.href = "/slide"; }, 3000);
         }
     }
 
@@ -190,7 +184,6 @@ export default function EditarBorrarSlide(){
                                     type="file"
                                     className="form-control-file border"
                                     name="imagen"
-                                    required
                                 />
                                 
                                 <div className="invalid-feedback invalid-imagen"></div>
