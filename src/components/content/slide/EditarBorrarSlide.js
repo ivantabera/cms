@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import {rutaAPI} from '../../../config/Config';
 import $ from 'jquery';
 import notie from 'notie';
-/* import 'notie/dist/notie.css'; */
+import 'notie/dist/notie.css';
+import Swal from 'sweetalert2';
 
 export default function EditarBorrarSlide(){
 
@@ -156,6 +157,74 @@ export default function EditarBorrarSlide(){
         
     })
 
+    /* Capturar datos para borrar */
+    $(document).on("click", ".borrarInput", function(e){
+
+        e.preventDefault();
+
+        let data = $(this).attr("data").split('_,')[0];
+        console.log('data', data)
+
+
+        Swal.fire({
+            title:'¿Estas seguro de querer borrar a este Slide?',
+            text: "Esta accion no puede ser revertida",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, borralo!'
+        }).then((result) => {
+            if(result.value){
+
+                /* Ejecutamos servicio DELETE */
+                const borrarSlide = async () => {
+                    const result = await deleteData(data);
+
+                    /* Error en la peticion */
+                    if(result.status === 400){
+                        Swal.fire({
+                            type: "error",
+                            title: result.mensaje,
+                            showConfirmButton: true,
+                            confirmButtonText: "Cerrar"
+                        }).then(function(result){
+                            if(result.value){
+                                window.location.href="/slide"
+                            }
+                        })
+                    }
+
+                    /* Peticion exitosa */
+                    if(result.status === 200){
+                        Swal.fire({
+                            type: "success",
+                            title: result.mensaje,
+                            showConfirmButton: true,
+                            confirmButtonText: "Cerrar"
+                        }).then(function(result){
+                            if(result.value){
+                                window.location.href="/slide"
+                            }
+                        })
+                    }
+
+                }
+                borrarSlide();
+                if(result){
+                    Swal.fire(
+                        'Borrado!',
+                        'El slide ha sido borrado',
+                        'success'
+                    )
+                }
+                
+            }
+        });
+
+    })
+
+    /* Retorno de vista */
     return(
         <div className="modal" id="editarSlide">
             <div className="modal-dialog">
@@ -272,7 +341,7 @@ const putData = data => {
     const url = `${rutaAPI}/actualizar-slide/${data.id}`;
     const token = localStorage.getItem("ACCESS_TOKEN");
 
-    /* Crear el formulario para pasar estilo form-data (imagenes) */
+    /* Crear el formulario para pasar estilo form-data (formulario con imagenes) */
     let formData = new FormData();
 
     formData.append("imagen", data.archivo);
@@ -286,6 +355,29 @@ const putData = data => {
         body:formData,
         headers: {
             "Authorization" : token
+        }
+    }
+
+    return fetch(url, params).then(response => {
+        return response.json();
+    }).then(result => {
+        return result;
+    }).catch(err =>{
+        return err;
+    })
+}
+
+/* Peticion delete para BORRAR slide */
+const deleteData = data => {
+
+    const url = `${rutaAPI}/borrar-slide/${data}`;
+    const token = localStorage.getItem("ACCESS_TOKEN");
+
+    const params = {
+        method:"DELETE",
+        headers: {
+            "Authorization" : token,
+            "Content-type" : "application/json"
         }
     }
 
