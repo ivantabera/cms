@@ -3,8 +3,32 @@ import {rutaAPI} from '../../../config/Config';
 import $ from 'jquery';
 import notie from 'notie';
 import 'notie/dist/notie.css';
+import 'summernote/dist/summernote-lite.css';
+import 'summernote/dist/summernote-lite.js'
 
 export default function CrearArticulos(){
+
+    /* FORMATO URL */
+    let limpiarUrl = textoEscrito =>{
+        let texto = textoEscrito.toLowerCase();
+        texto = texto.replace(/[á]/g, 'a');
+        texto = texto.replace(/[é]/g, 'e');
+        texto = texto.replace(/[í]/g, 'i');
+        texto = texto.replace(/[ó]/g, 'o');
+        texto = texto.replace(/[ú]/g, 'u');
+        texto = texto.replace(/[ñ]/g, 'n');
+        texto = texto.replace(/[ ]/g, '-');
+
+        return texto;
+    }
+
+    $(document).on('keyup', '.inputUrl', function(){
+
+        $(this).val(
+
+            limpiarUrl($(this).val())
+        )
+    })
 
     /* Hook para capturar datos */
     const [articulo, crearArticulo] = useState({
@@ -23,6 +47,7 @@ export default function CrearArticulos(){
 
         /* Validamos formato jpg y png, que la portada no rebase los 2mb y convertirla en base 64 para previsualizar */
         if ( portada["type"] !== "image/jpeg" && portada["type"] !== "image/png" ) {
+
             $("#portada").val("");
 
             /* Alertas notie */
@@ -35,7 +60,9 @@ export default function CrearArticulos(){
             /* Cuando no pase la validacion del formato se tiene que quedar vacio el campo previsualizarPortada de la vista */
             $(".previsualizarPortada").attr("src", "");
             return;
+
         } else if( portada["size"] > 2000000 ){
+            
             $("#portada").val("");
 
             /* Alertas notie */
@@ -51,11 +78,13 @@ export default function CrearArticulos(){
 
         } else {
 
-            let datosArchivo = new FileReader(portada);
+            let datosArchivo = new FileReader();
             datosArchivo.readAsDataURL(portada);
 
             $(datosArchivo).on("load", function(event){
+
                 let rutaArchivo = event.target.result;
+                
                 $(".previsualizarPortada").attr("src", rutaArchivo);
 
                 /* Actualizar los datos JSON */
@@ -68,7 +97,6 @@ export default function CrearArticulos(){
                 })
 
             })
-
         }
 
     }
@@ -89,9 +117,16 @@ export default function CrearArticulos(){
             return;
         }
 
-        /* Validamos el url */
+        /* Validar que el campo no venga vacio */
+        if(url === ""){
+            $(".invalid-url").show();
+            $(".invalid-url").html("Completa este campo");
+            return;
+        }
+
+        /* Validamos la expresion regular de la url */
         if(url !== ""){
-            const expUrl = /^(?=.*[A-Za-z]).{1,30}$/;
+            const expUrl = /^([0-9A-Za-z-]).{1,50}$/;
 
             if(!expUrl.test(url)){
                 $(".invalid-url").show();
@@ -100,9 +135,16 @@ export default function CrearArticulos(){
             }
         }
 
+        /* Validar que el campo no venga vacio */
+        if(titulo === ""){
+            $(".invalid-titulo").show();
+            $(".invalid-titulo").html("Completa este campo");
+            return;
+        }
+
         /* Validamos el titulo */
         if(titulo !== ""){
-            const expTitulo = /^([A-Za-z]).{1,60}$/;
+            const expTitulo = /^([0-9A-Za-zñÑáéíóúÁÉÍÓÚ ]).{1,30}$/;
 
             if(!expTitulo.test(titulo)){
                 $(".invalid-titulo").show();
@@ -111,9 +153,16 @@ export default function CrearArticulos(){
             }
         }
 
+        /* Validar que el campo no venga vacio */
+        if(intro === ""){
+            $(".invalid-intro").show();
+            $(".invalid-intro").html("Completa este campo");
+            return;
+        }
+
         /* Validamos el intro */
         if(intro !== ""){
-            const expIntro = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{1,1000}$/;
+            const expIntro = /^([(\\)\\=\\&\\$\\-\\_\\*\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]).{1,300}$/;
 
             if(!expIntro.test(intro)){
                 $(".invalid-intro").show();
@@ -122,9 +171,16 @@ export default function CrearArticulos(){
             }
         }
 
+        /* Validar que el campo no venga vacio */
+        if(contenido === ""){
+            $(".invalid-contenido").show();
+            $(".invalid-contenido").html("Completa este campo");
+            return;
+        }
+
         /* Validamos el descripcion */
         if(contenido !== ""){
-            const expContenido = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{1,5000}$/;
+            const expContenido = /^([(\\)\\=\\&\\$\\-\\_\\*\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]).{1,}$/;
 
             if(!expContenido.test(contenido)){
                 $(".invalid-contenido").show();
@@ -157,13 +213,29 @@ export default function CrearArticulos(){
 
     }
 
+    /* Summernote */
+    $(document).ready(function(){
+
+        $("#contenido").summernote({
+            height:350
+        });
+    });
+
+    /* Limpiar formulario */
+    $(document).on("click", ".limpiarFormulario", function(){
+        $(".modal").find('form')[0].reset();
+        $(".previsualizarPortada").attr("src", "");
+    })
+    
+
+    /* Retorno de la vista */
     return(
         <div className="modal" id="crearArticulo">
             <div className="modal-dialog">
                 <div className="modal-content">
                 
                     <div className="modal-header">
-                        <h4 className="modal-title">Crear Slide</h4>
+                        <h4 className="modal-title">Crear Articulo</h4>
                         <button type="button" className="close" data-dismiss="modal">&times;</button>
                     </div>
                     
@@ -202,15 +274,17 @@ export default function CrearArticulos(){
                                 <div className=" input-group mb-3">
                                     
                                     <div className="input-group-append input-group-text">
-                                        <i className="fas fa-heading"></i>
+                                        <i className="fas fa-link"></i>
                                     </div>
 
                                     <input
                                         id="url"
                                         type="text"
-                                        className="form-control"
+                                        className="form-control inputUrl text-lowercase"
                                         name="url"
                                         placeholder="Ingrese la url *"
+                                        pattern="([0-9A-Za-z-]).{1,50}"
+                                        required
                                     />
                                     <div className="invalid-feedback invalid-url"></div>
 
@@ -237,7 +311,8 @@ export default function CrearArticulos(){
                                         className="form-control"
                                         name="titulo"
                                         placeholder="Ingrese el Titulo*"
-                                        pattern="([A-Za-z]).{1,60}"
+                                        pattern="([0-9A-Za-zñÑáéíóúÁÉÍÓÚ ]).{1,30}"
+                                        required
                                     />
                                     <div className="invalid-feedback invalid-titulo"></div>
 
@@ -256,7 +331,7 @@ export default function CrearArticulos(){
                                 <div className=" input-group mb-3">
                                     
                                     <div className="input-group-append input-group-text">
-                                        <i className="fas fa-heading"></i>
+                                        <i className="fas fa-file-alt"></i>
                                     </div>
 
                                     <input
@@ -265,7 +340,8 @@ export default function CrearArticulos(){
                                         className="form-control"
                                         name="intro"
                                         placeholder="Ingrese el Intro*"
-                                        pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{1,1000}"
+                                        pattern="([(\\)\\=\\&\\$\\-\\_\\*\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]).{1,300}"
+                                        required
                                     />
                                     <div className="invalid-feedback invalid-intro"></div>
 
@@ -277,26 +353,10 @@ export default function CrearArticulos(){
                             <div className="form-group">
 
                                 <label className="small text-secondary" htmlFor="contenido">
-                                    * No ingrese caracteres especiales, solo letras y numeros
+                                    Ingrese el contenido del articulo:
                                 </label>
 
-                                <div className=" input-group mb-3">
-                                    
-                                    <div className="input-group-append input-group-text">
-                                        <i className="fas fa-file-alt"></i>
-                                    </div>
-
-                                    <input
-                                        id="contenido"
-                                        type="text"
-                                        className="form-control"
-                                        name="contenido"
-                                        placeholder="Ingrese el Contenido *"
-                                        pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{1,5000}"
-                                    />
-                                    <div className="invalid-feedback invalid-contenido"></div>
-
-                                </div>
+                                <div className="form-control summernote" rows="5" id="contenido" name="contenido"></div>
 
                             </div>
 
@@ -343,11 +403,8 @@ const postData = data => {
         }
     }
 
-    console.log('params', params)
-
 
     return fetch(url, params).then(response => {
-        console.log('response', response)
         return response.json();
     }).then(result => {
         return result;

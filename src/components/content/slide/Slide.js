@@ -35,7 +35,7 @@ export default function Slide(){
         })
 
         /* Comprobando que los datos vengan correctos */
-        /* console.log('dataSet', dataSet) */
+        //console.log('dataSet', dataSet)
 
         /* Ejecutamos datatable */
         $(document).ready( function () {

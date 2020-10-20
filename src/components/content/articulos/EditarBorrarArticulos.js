@@ -4,73 +4,80 @@ import $ from 'jquery';
 import notie from 'notie';
 import 'notie/dist/notie.css';
 import Swal from 'sweetalert2';
+import 'summernote/dist/summernote-lite.css';
+import 'summernote/dist/summernote-lite.js'
 
-export default function EditarBorrarSlide(){
+export default function EditarBorrarArticulos(){
 
     /* Hook para capturar datos */
-    const [slide, editarSlide] = useState({
-        archivo:null,
+    const [articulo, editarArticulo] = useState({
+        portada: null,
+        url: "",
         titulo:"",
-        descripcion:"",
-        id:""
+        intro:"",
+        contenido:"", 
+        id: ""
     })
 
-    /* onChange */
     const cambiaFormPut =  e => {
 
-        if($('#editarImagen').val()){
-        
-            /* Recibimos la imagen */
-            let imagen = $("#editarImagen").get(0).files[0];
+        console.log("editportada",$("#editarPortada").val());
 
-            /* Validamos formato jpg y png, que la imagen no rebase los 2mb y convertirla en base 64 para previsualizar */
-            if ( imagen["type"] !== "image/jpeg" && imagen["type"] !== "image/png" ) {
+        if($("#editarPortada").val()){
 
-                //Vaciamos el campo si el formato no conincide con el solicitado
-                $("#imagen").val("");
+             /* Recibimos la portada */
+            let portada = $("#editarPortada").get(0).files[0];
 
-                /* Alertas notie */
-                notie.alert({
-                    type: 3, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-                    text: '¡Error: La imagen debe estar en formato JPG o PNG!',
-                    time: 7 // optional, default = 3, minimum = 1,
-                })
-                
-                /* Cuando no pase la validacion del formato se tiene que quedar vacio el campo previsualizarImg de la vista */
-                $(".previsualizarImg").attr("src", "");
-                return;
+            /* Validamos formato jpg y png, que la portada no rebase los 2mb y convertirla en base 64 para previsualizar */
+            if ( portada["type"] !== "image/jpeg" && portada["type"] !== "image/png" ) {
 
-            } else if( imagen["size"] > 2000000 ){
-                $("#imagen").val("");
+                $("#editarPortada").val("");
 
                 /* Alertas notie */
                 notie.alert({
                     type: 3, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-                    text: '¡Error: La imagen no debe pesar mas de 2MB!',
+                    text: '¡Error: La portada debe estar en formato JPG o PNG!',
+                    time: 7 // optional, default = 3, minimum = 1,
+                })
+                
+                /* Cuando no pase la validacion del formato se tiene que quedar vacio el campo previsualizarPortada de la vista */
+                $(".previsualizarPortada").attr("src", "");
+                return;
+
+            } else if( portada["size"] > 2000000 ){
+                
+                $("#editarPortada").val("");
+
+                /* Alertas notie */
+                notie.alert({
+                    type: 3, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+                    text: '¡Error: La portada no debe pesar mas de 2MB!',
                     time: 7 // optional, default = 3, minimum = 1,
                 })
 
-                /* Cuando no pase la validacion del formato se tiene que quedar vacio el campo previsualizarImg de la vista */
-                $(".previsualizarImg").attr("src", "");
+                /* Cuando no pase la validacion del formato se tiene que quedar vacio el campo previsualizarPortada de la vista */
+                $(".previsualizarPortada").attr("src", "");
                 return;
-                
+
             } else {
 
                 let datosArchivo = new FileReader();
-                datosArchivo.readAsDataURL(imagen);
+                datosArchivo.readAsDataURL(portada);
 
                 $(datosArchivo).on("load", function(event){
 
-                    /* Ruta de imagen codificado en formato base 64 para previzualizarlo en el ID previsualizarImg */
                     let rutaArchivo = event.target.result;
-                    $(".previsualizarImg").attr("src", rutaArchivo);
+                    
+                    $(".previsualizarPortada").attr("src", rutaArchivo);
 
                     /* Actualizar los datos JSON */
-                    editarSlide({
-                        'archivo' :imagen,
+                    editarArticulo({
+                        'portada' : portada,
+                        'url' : articulo.url,
                         'titulo' : $('#editarTitulo').val(),
-                        'descripcion': $('#editarDescripcion').val(),
-                        'id':$('#editarId').val()
+                        'intro' : $('#editarIntro').val(),
+                        'contenido': $('#editarContenido').val(),
+                        'id': $("#idArticulo").val()
                     })
 
                 })
@@ -78,29 +85,37 @@ export default function EditarBorrarSlide(){
 
         } else {
             /* Actualizar los datos JSON */
-            editarSlide({
-                'archivo' : null,
+            editarArticulo({
+                'portada' : null,
+                'url' : articulo.url,
                 'titulo' : $('#editarTitulo').val(),
-                'descripcion': $('#editarDescripcion').val(),
-                'id':$('#editarId').val()
+                'intro' : $('#editarIntro').val(),
+                'contenido': $('#editarContenido').val(),
+                'id': $("#idArticulo").val()
             })
         }
 
     }
 
-    /* onSubmit */
+
     const submitPut = async e => {
 
         $('.alert').remove();
-
+        
         e.preventDefault();
+        
+        const { titulo, intro, contenido } = articulo;
 
-        const { titulo, descripcion } = slide;
-
+        /* Validar que el campo no venga vacio */
+        if(titulo === ""){
+            $(".invalid-titulo").show();
+            $(".invalid-titulo").html("Completa este campo");
+            return;
+        }
 
         /* Validamos el titulo */
         if(titulo !== ""){
-            const expTitulo = /^(?=.*[A-Za-z]).{1,30}$/;
+            const expTitulo = /^([0-9A-Za-zñÑáéíóúÁÉÍÓÚ ]).{1,30}$/;
 
             if(!expTitulo.test(titulo)){
                 $(".invalid-titulo").show();
@@ -109,19 +124,49 @@ export default function EditarBorrarSlide(){
             }
         }
 
-        /* Validamos el descripcion */
-        if(descripcion !== ""){
-            const expDescripcion = /^(?=.*[A-Za-z]).{1,100}$/;
+        /* Validar que el campo no venga vacio */
+        if(intro === ""){
+            $(".invalid-intro").show();
+            $(".invalid-intro").html("Completa este campo");
+            return;
+        }
 
-            if(!expDescripcion.test(descripcion)){
-                $(".invalid-descripcion").show();
-                $(".invalid-descripcion").html("Utiliza un formato que coincida con el solicitado");
+        /* Validamos el intro */
+        if(intro !== ""){
+            const expIntro = /^([(\\)\\=\\&\\$\\-\\_\\*\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]).{1,300}$/;
+
+            if(!expIntro.test(intro)){
+                $(".invalid-intro").show();
+                $(".invalid-intro").html("Utiliza un formato que coincida con el solicitado");
                 return;
             }
         }
 
-        /* Ejecutamos servicio PUT */
-        const result = await putData(slide);
+        /* Validar que el campo no venga vacio */
+        if(contenido === ""){
+            $(".invalid-contenido").show();
+            $(".invalid-contenido").html("Completa este campo");
+            return;
+        }
+
+        /* Validamos el descripcion */
+        if(contenido !== ""){
+            const expContenido = /^([(\\)\\=\\&\\$\\-\\_\\*\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]).{1,}$/;
+
+            if(!expContenido.test(contenido)){
+                $(".invalid-contenido").show();
+                $(".invalid-contenido").html("Utiliza un formato que coincida con el solicitado");
+                return;
+            }
+        }
+
+        /* Ejecutamos servicio POST */
+        const result = await putData(articulo);
+
+        /* Error en la peticion */
+        if(result.status === 500){
+            $(".modal-footer").before(`<div class="alert alert-danger">${result.mensaje}</div>`)
+        }
 
         /* Error en la peticion */
         if(result.status === 400){
@@ -134,29 +179,45 @@ export default function EditarBorrarSlide(){
 
             $('button[type="submit"]').remove();
 
-            setTimeout(() =>{ window.location.href = "/slide"; }, 3000);
+            setTimeout(() =>{ window.location.href = "/articulos"; }, 3000);
         }
+
     }
 
     /* Capturar datos para editar */
-    $(document).on('click', '.editarInputs', function(e){
+
+    $(document).on("click", ".editarInputs", function(e){
+
         e.preventDefault();
 
-        let data = $(this).attr('data').split('_,');
+        let data = $(this).attr("data").split('_,');
+        
+        $("#idArticulo").val(data[0]);
+        $(".previsualizarPortada").attr("src", `${rutaAPI}/mostrar-img-articulo/${data[4]}+${data[1]}`);
+        $("#editarTitulo").val(data[2]);
+        $("#editarIntro").val(data[3]);
+        $("#editarUrl").val(data[4]);
+        $("#editarContenido").val(data[5]);
 
-        $('#editarId').val(data[0]);
-        $('.previsualizarImg').attr("src", `${rutaAPI}/mostrar-img-slide/${data[1]}`);
-        $('#editarTitulo').val(data[2]);
-        $('#editarDescripcion').val(data[3]);
+        
 
-        editarSlide({
-            'archivo' : null,
+        /* Actualizar los datos JSON */
+        editarArticulo({
+            'portada' : null,
+            'url' : data[4],
             'titulo' : data[2],
-            'descripcion': data[3],
+            'intro' : data[3],
+            'contenido': data[5],
             'id': data[0]
         })
-        
+
     })
+
+    /* Summernote */
+
+    /* $("#editarContenido").summernote({
+        height:350
+    }); */
 
     /* Capturar datos para borrar */
     $(document).on("click", ".borrarInput", function(e){
@@ -177,7 +238,8 @@ export default function EditarBorrarSlide(){
             if(result.value){
 
                 /* Ejecutamos servicio DELETE */
-                const borrarSlide = async () => {
+                const borrarArticulo = async () => {
+
                     const result = await deleteData(data);
 
                     /* Error en la peticion */
@@ -189,7 +251,7 @@ export default function EditarBorrarSlide(){
                             confirmButtonText: "Cerrar"
                         }).then(function(result){
                             if(result.value){
-                                window.location.href="/slide"
+                                window.location.href="/articulos"
                             }
                         })
                     }
@@ -203,13 +265,13 @@ export default function EditarBorrarSlide(){
                             confirmButtonText: "Cerrar"
                         }).then(function(result){
                             if(result.value){
-                                window.location.href="/slide"
+                                window.location.href="/articulos"
                             }
                         })
                     }
 
                 }
-                borrarSlide();
+                borrarArticulo();
                 if(result){
                     Swal.fire(
                         'Borrado!',
@@ -223,14 +285,14 @@ export default function EditarBorrarSlide(){
 
     })
 
-    /* Retorno de vista */
     return(
-        <div className="modal" id="editarSlide">
+
+        <div className="modal" id="editarBorrarArticulo">
             <div className="modal-dialog">
                 <div className="modal-content">
                 
                     <div className="modal-header">
-                        <h4 className="modal-title">Editar Slide</h4>
+                        <h4 className="modal-title">Editar Articulo</h4>
                         <button type="button" className="close" data-dismiss="modal">&times;</button>
                     </div>
                     
@@ -238,25 +300,53 @@ export default function EditarBorrarSlide(){
 
                         <div className="modal-body">
 
-                            <input type="hidden" id="editarId"/>
+                            <input type="hidden" id="idArticulo"/>
 
-                            {/* Entradda de imagen */}
+                            {/* Entradda de portada */}
                             <div className="form-group">
 
-                                <label className="small text-secondary" htmlFor="editarImagen">
+                                <label className="small text-secondary" htmlFor="editarPortada">
                                     * Peso max. 2MB | Formato: JPG o PNG
                                 </label>
 
                                 <input
-                                    id="editarImagen"
+                                    id="editarPortada"
                                     type="file"
                                     className="form-control-file border"
-                                    name="imagen"
+                                    name="portada"
                                 />
                                 
-                                <div className="invalid-feedback invalid-imagen"></div>
+                                <div className="invalid-feedback invalid-portada"></div>
 
-                                <img className="previsualizarImg img-fluid" alt=""/>
+                                <img className="previsualizarPortada img-fluid" alt=""/>
+
+                            </div>
+
+                            {/* Entrada url */}
+                            <div className="form-group">
+
+                                <label className="small text-secondary" htmlFor="editarUrl">
+                                    * La URL no se puede modificar
+                                </label>
+
+                                <div className=" input-group mb-3">
+                                    
+                                    <div className="input-group-append input-group-text">
+                                        <i className="fas fa-link"></i>
+                                    </div>
+
+                                    <input
+                                        id="editarUrl"
+                                        type="text"
+                                        className="form-control inputUrl text-lowercase"
+                                        name="url"
+                                        placeholder="Ingrese la url *"
+                                        pattern="([0-9A-Za-z-]).{1,50}"
+                                        readOnly
+                                    />
+                                    <div className="invalid-feedback invalid-url"></div>
+
+                                </div>
 
                             </div>
 
@@ -279,7 +369,8 @@ export default function EditarBorrarSlide(){
                                         className="form-control"
                                         name="titulo"
                                         placeholder="Ingrese el Titulo*"
-                                        pattern="([A-Za-z]).{1,30}"
+                                        pattern="([0-9A-Za-zñÑáéíóúÁÉÍÓÚ ]).{1,30}"
+                                        required
                                     />
                                     <div className="invalid-feedback invalid-titulo"></div>
 
@@ -287,10 +378,11 @@ export default function EditarBorrarSlide(){
 
                             </div>
 
-                            {/* Entrada descripcion */}
+
+                            {/* Entrada intro */}
                             <div className="form-group">
 
-                                <label className="small text-secondary" htmlFor="editarDescripcion">
+                                <label className="small text-secondary" htmlFor="editarIntro">
                                     * No ingrese caracteres especiales, solo letras y numeros
                                 </label>
 
@@ -301,16 +393,28 @@ export default function EditarBorrarSlide(){
                                     </div>
 
                                     <input
-                                        id="editarDescripcion"
+                                        id="editarIntro"
                                         type="text"
                                         className="form-control"
-                                        name="descripcion"
-                                        placeholder="Ingrese la Descripción *"
-                                        pattern="([A-Za-z]).{1,100}"
+                                        name="intro"
+                                        placeholder="Ingrese el Intro*"
+                                        pattern="([(\\)\\=\\&\\$\\-\\_\\*\\<\\>\\?\\¿\\!\\¡\\:\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]).{1,300}"
+                                        required
                                     />
-                                    <div className="invalid-feedback invalid-descripcion"></div>
+                                    <div className="invalid-feedback invalid-intro"></div>
 
                                 </div>
+
+                            </div>
+
+                            {/* Entrada contenido */}
+                            <div className="form-group">
+
+                                <label className="small text-secondary" htmlFor="editarContenido">
+                                    Ingrese el contenido del articulo:
+                                </label>
+
+                                <textarea className="form-control summernote" rows="5" id="editarContenido" name="contenido"></textarea>
 
                             </div>
 
@@ -330,6 +434,7 @@ export default function EditarBorrarSlide(){
                 </div>
             </div>
         </div>
+
     )
 
 }
@@ -337,15 +442,17 @@ export default function EditarBorrarSlide(){
 /* Peticion PUT slide */
 const putData = data => {
     
-    const url = `${rutaAPI}/actualizar-slide/${data.id}`;
+    const url = `${rutaAPI}/actualizar-articulo/${data.id}`;
     const token = localStorage.getItem("ACCESS_TOKEN");
 
     /* Crear el formulario para pasar estilo form-data (formulario con imagenes) */
     let formData = new FormData();
 
-    formData.append("imagen", data.archivo);
+    formData.append("portada", data.archivo);
+    formData.append("url", data.url);
     formData.append("titulo", data.titulo);
-    formData.append("descripcion", data.descripcion);
+    formData.append("intro", data.intro);
+    formData.append("contenido", data.contenido);
 
     const params = {
         method:"PUT",
@@ -367,7 +474,7 @@ const putData = data => {
 /* Peticion delete para BORRAR slide */
 const deleteData = data => {
 
-    const url = `${rutaAPI}/borrar-slide/${data}`;
+    const url = `${rutaAPI}/borrar-articulo/${data}`;
     const token = localStorage.getItem("ACCESS_TOKEN");
 
     const params = {
